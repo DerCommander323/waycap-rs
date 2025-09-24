@@ -86,6 +86,7 @@ mod waycap_egl;
 
 pub use crate::encoders::dma_buf_encoder::DmaBufEncoder;
 pub use crate::encoders::dynamic_encoder::DynamicEncoder;
+#[cfg(feature = "nvenc")]
 pub use crate::encoders::nvenc_encoder::NvencEncoder;
 pub use crate::encoders::rgba_image_encoder::RgbaImageEncoder;
 pub use crate::encoders::vaapi_encoder::VaapiEncoder;

@@ -1,5 +1,6 @@
 #[derive(Debug, Clone, Copy)]
 pub enum VideoEncoder {
+    #[cfg(feature = "nvenc")]
     H264Nvenc,
     H264Vaapi,
 }

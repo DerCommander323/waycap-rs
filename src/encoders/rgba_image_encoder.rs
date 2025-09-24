@@ -87,8 +87,11 @@ impl PipewireSPA for RgbaImageEncoder {
             ),
             pw::spa::pod::property!(
                 pw::spa::param::format::FormatProperties::VideoFormat,
+                Choice,
+                Enum,
                 Id,
-                pw::spa::param::video::VideoFormat::BGRA
+                pw::spa::param::video::VideoFormat::BGRA,
+                pw::spa::param::video::VideoFormat::BGRx
             ),
             pw::spa::pod::property!(
                 pw::spa::param::format::FormatProperties::VideoSize,

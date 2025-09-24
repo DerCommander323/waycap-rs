@@ -1,12 +1,14 @@
 use crate::{
     encoders::video::{PipewireSPA, StartVideoEncoder},
-    types::{error::WaycapError, video_frame::RawVideoFrame},
+    types::{error::{Result, WaycapError}, video_frame::RawVideoFrame},
     waycap_egl::{EglContext, GpuVendor},
-    NvencEncoder, VaapiEncoder, VideoEncoder,
+    VaapiEncoder, VideoEncoder,
 };
-use crossbeam::channel::Receiver;
 
-use crate::types::error::Result;
+#[cfg(feature = "nvenc")]
+use crate::encoders::nvenc_encoder::NvencEncoder;
+
+use crossbeam::channel::Receiver;
 
 /// "Encoder" which provides the raw DMA-Buf pointers directly.
 ///
@@ -58,7 +60,15 @@ impl PipewireSPA for DmaBufEncoder {
     fn get_spa_definition() -> Result<pipewire::spa::pod::Object> {
         let dummy_context = EglContext::new(100, 100)?;
         match dummy_context.get_gpu_vendor() {
-            GpuVendor::NVIDIA => NvencEncoder::get_spa_definition(),
+            GpuVendor::NVIDIA => {
+                cfg_if::cfg_if! {
+                    if #[cfg(feature = "nvenc")] {
+                        NvencEncoder::get_spa_definition()
+                    } else {
+                        VaapiEncoder::get_spa_definition()
+                    }
+                }
+            },
             GpuVendor::AMD | GpuVendor::INTEL => VaapiEncoder::get_spa_definition(),
             GpuVendor::UNKNOWN => Err(WaycapError::Init(
                 "Unknown/Unimplemented GPU vendor".to_string(),
