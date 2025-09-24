@@ -208,6 +208,7 @@ impl PipewireSPA for VaapiEncoder {
                 pw::spa::param::video::VideoFormat::NV12,
                 pw::spa::param::video::VideoFormat::I420,
                 pw::spa::param::video::VideoFormat::BGRA,
+                pw::spa::param::video::VideoFormat::BGRx,
             ),
             pw::spa::pod::property!(
                 pw::spa::param::format::FormatProperties::VideoSize,
